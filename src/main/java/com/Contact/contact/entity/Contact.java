@@ -12,20 +12,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sub-employee_details")
-public class Lower implements Serializable {
+@Table(name = "subemployee")
+public class Contact implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private String firstname;
-	private String lastname;
+
 	private String email;
 	private String mobileNumber;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "employeeid")
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	public Long getId() {
@@ -34,22 +32,6 @@ public class Lower implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
 	}
 
 	public String getEmail() {

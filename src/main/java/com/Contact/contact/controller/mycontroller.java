@@ -15,43 +15,65 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Contact.contact.dto.Employeedata;
 import com.Contact.contact.dto.EmployeedataUpdate;
 import com.Contact.contact.dto.Employeedataresponse;
-import com.Contact.contact.service.ContactService;
-
+import com.Contact.contact.dto.CreateContacts;
+import com.Contact.contact.dto.ContactUpdate;
+import com.Contact.contact.dto.Contactdata;
+import com.Contact.contact.entity.Contact;
+import com.Contact.contact.service.EmployeeService;
+import com.Contact.contact.entity.Employee;
 
 @RestController
 @RequestMapping("/data")
 public class mycontroller {
 	
 	@Autowired
-	private ContactService empService;
-
-	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
-	public EmployeeResponseList getAll() {
-		return empService.getAll();
-	}
+	private EmployeeService empservice;
 	
 	/**
 	 * Default content type application/json
 	 * 
 	 * @param request
-	 */	
+	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Employeedataresponse addemployee(@RequestBody Employeedata request) {
-		return empService.addemployee(request);
+	public Employeedataresponse addEmployee(@RequestBody Employeedata request) {
+		return empservice.addemployee(request);
 	}
 	
+	@PostMapping("/{id}/contacts")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public Employeedataresponse addEmployee(@PathVariable Long id,@RequestBody CreateContacts request) {
+		return empservice.savesubemp(id, request);
+	}
+
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
+	public EmployeeResponseList getAll() {
+		return empservice.getAll();
+	}
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		empService.deleteAll(id);
+		empservice.deleteAll(id);
+	}
+
+	@PutMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Employee update(@PathVariable Long id, @RequestBody EmployeedataUpdate request) {
+		return empservice.updateAll(id, request);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/{id}/contact")
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public void update(@PathVariable Long id, @RequestBody EmployeedataUpdate request) {
-		empService.updateAll(id,request);
+	public Contact update(@PathVariable Long id, @RequestBody ContactUpdate contact) {
+		return empservice.updateContact(id, contact);
+	}
+	
+	@GetMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Employeedata get(@PathVariable Long id) {
+		return empservice.get(id);
 	}
 	
 }

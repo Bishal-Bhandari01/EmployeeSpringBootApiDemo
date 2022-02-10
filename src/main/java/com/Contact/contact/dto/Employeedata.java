@@ -1,5 +1,7 @@
 package com.Contact.contact.dto;
 
+import java.util.List;
+
 public class Employeedata {
 	
 	protected String firstname;
@@ -8,7 +10,7 @@ public class Employeedata {
 	protected String password;
 	protected String mobileNumber;
 	protected String level;
-	
+	protected List<Contactdata> contacts;
 	
 	public String getFirstname() {
 		return firstname;
@@ -46,7 +48,10 @@ public class Employeedata {
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	
-	
-
+	public List<Contactdata> getContacts() {
+		return contacts;
+	}
+	public void setContacts(List<Contactdata> contacts) {
+		this.contacts = contacts;
+	}	
 }
