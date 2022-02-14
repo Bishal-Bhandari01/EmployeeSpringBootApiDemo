@@ -54,7 +54,7 @@ public class Contact implements Serializable {
 		return employee;
 	}
 
-	public void setEmployee(Employee employee) {
+	public void setEmployee(Contact emp) {
 		this.employee = employee;
 	}
 	

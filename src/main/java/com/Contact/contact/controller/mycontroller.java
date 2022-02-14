@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Contact.contact.dto.Employeedata;
 import com.Contact.contact.dto.EmployeedataUpdate;
 import com.Contact.contact.dto.Employeedataresponse;
+
+import java.util.List;
+
+import com.Contact.contact.dto.ContactResponse;
 import com.Contact.contact.dto.CreateContacts;
-import com.Contact.contact.dto.ContactUpdate;
-import com.Contact.contact.dto.Contactdata;
-import com.Contact.contact.entity.Contact;
 import com.Contact.contact.service.EmployeeService;
 import com.Contact.contact.entity.Employee;
 
@@ -27,7 +28,7 @@ import com.Contact.contact.entity.Employee;
 public class mycontroller {
 	
 	@Autowired
-	private EmployeeService empservice;
+	public EmployeeService empservice;
 	
 	/**
 	 * Default content type application/json
@@ -57,6 +58,12 @@ public class mycontroller {
 	public void delete(@PathVariable Long id) {
 		empservice.deleteAll(id);
 	}
+	
+	@DeleteMapping("/{employee_id}/delcontact")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deletesingle(@PathVariable Long employee_id, @RequestBody Long id) {
+		empservice.deletesingle(employee_id, id);
+	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
@@ -74,6 +81,25 @@ public class mycontroller {
 	@ResponseStatus(code = HttpStatus.OK)
 	public Employeedata get(@PathVariable Long id) {
 		return empservice.get(id);
+	}
+
+	
+	@DeleteMapping("/{employee_id}/deletecontact")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deleteContact(@PathVariable Long employee_id, @RequestBody List<Long> id){
+		empservice.deletemultiple(employee_id, id);
+	}
+
+	@DeleteMapping("deleteall/{employee_id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deleteAllcontact(@PathVariable Long employee_id){
+		empservice.deleteAllcontact(employee_id);
+	}
+
+	@GetMapping("/getallcontact/{employee_id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public ContactResponse getcontact(@PathVariable Long employee_id){
+		return empservice.getcontact(employee_id);
 	}
 	
 }

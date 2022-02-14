@@ -1,7 +1,6 @@
 package com.Contact.contact.service;
 
 import java.util.*;
-import java.util.stream.Collector;
 
 import javax.transaction.Transactional;
 
@@ -12,9 +11,10 @@ import com.Contact.contact.controller.EmployeeResponseList;
 import com.Contact.contact.dto.Employeedata;
 import com.Contact.contact.dto.EmployeedataUpdate;
 import com.Contact.contact.dto.Employeedataresponse;
+import com.Contact.contact.dto.ContactResponse;
+import com.Contact.contact.dto.ContactUpdate;
 import com.Contact.contact.dto.Contactdata;
 import com.Contact.contact.dto.CreateContacts;
-import com.Contact.contact.dto.ContactUpdate;
 import com.Contact.contact.entity.Employee;
 import com.Contact.contact.entity.Contact;
 import com.Contact.contact.repository.EmployeeRepository;
@@ -156,11 +156,11 @@ public class EmployeeService {
 
 	public Contact updateContact(Long id, ContactUpdate contact) {
 		
-		Optional<Employee> optemp = employeeRepository.findById(id);
+		Optional<Employee> emp1 = subempRepository.findById(id);
 		
-		if(optemp.isPresent()) {
+		if(emp1.isPresent()) {
 			
-			Employee emp = optemp.get();
+			Employee emp = emp1.get();
 			
 			for(int i = 0; i < contact.getContacts().size(); i++) {
 				Contact subemp = new Contact();
@@ -176,26 +176,54 @@ public class EmployeeService {
 		
 	}
 
-	public Contact updateemp(Long id, ContactUpdate request) {
-		
-		Optional<Employee> optemp = employeeRepository.findById(id);
-		
-		if(optemp.isPresent()) {
-			
-			Employee emp = optemp.get();
-			
-			for(int i = 0; i < request.getContacts().size(); i++) {
-				Contact subemp = new Contact();
-				subemp.setEmail(request.getContacts().get(i).getEmail());
-				subemp.setMobileNumber(request.getContacts().get(i).getMobileNumber());
-				subemp.setEmployee(emp);
-				subempRepository.save(subemp);
-			}	
-			
-		}
-		return null;
+	@Transactional
+	public void deletesingle(Long employee_id, Long id) {
+		subempRepository.deleteDistinctByIdAndEmployeeId(employee_id, id);
 	}
 
+	@Transactional
+	public void deletemultiple(Long id, List<Long> employee_id) {
+		subempRepository.deleteByIdInAndEmployeeId(employee_id,id);
+	}
+
+	@Transactional
+    public void deleteAllcontact(Long employee_id) {
+
+		subempRepository.deleteByEmployeeId(employee_id);
+
+    }
+
+
+
+	public ContactResponse getcontact(Long employee_id) {
+		
+		Optional<Contact> contact = subempRepository.findById(employee_id);
+		if(contact.isPresent()) {
+			return getContact(contact.get());
+		}
+
+		return null;
+
+	}
+
+	private ContactResponse getContact(Contact contact) {
+
+		ContactResponse response = new ContactResponse();
+
+		List<Contact> lower = subempRepository.findByEmployeeId(contact.getEmployee());
+
+		List<Contactdata> subempdata = new ArrayList<>();
+		
+		for(Contact lowers: lower) {
+			Contactdata condata = new Contactdata();
+			condata.setEmail(lowers.getEmail());
+			condata.setMobileNumber(lowers.getMobileNumber());
+			subempdata.add(condata);
+		}
+		response.setContacts(subempdata);
+
+		return response;
+	}
 	
 }
 

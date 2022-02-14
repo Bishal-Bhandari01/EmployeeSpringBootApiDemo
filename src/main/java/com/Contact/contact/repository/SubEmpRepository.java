@@ -1,12 +1,11 @@
 package com.Contact.contact.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.Contact.contact.entity.Employee;
 import com.Contact.contact.entity.Contact;
+import com.Contact.contact.entity.Employee;
 
 public interface SubEmpRepository extends CrudRepository<Contact, Long> {
 
@@ -14,5 +13,11 @@ public interface SubEmpRepository extends CrudRepository<Contact, Long> {
 
 	List<Contact> findByEmployeeId(Long id);
 
-	Optional<Contact> findByUserId(Long id);	
+	void deleteById(Long id);
+
+	void deleteByIdInAndEmployeeId(List<Long> employee_id, Long id);
+
+    void deleteDistinctByIdAndEmployeeId(Long employee_id, Long id);
+
+	List<Contact> findByEmployeeId(Employee employee);
 }
